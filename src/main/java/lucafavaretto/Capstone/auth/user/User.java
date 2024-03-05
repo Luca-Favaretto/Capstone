@@ -5,7 +5,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lucafavaretto.Capstone.entity.contract.Contract;
+import lucafavaretto.Capstone.entity.internalCourses.InternalCourses;
+import lucafavaretto.Capstone.entity.presence.Presence;
+import lucafavaretto.Capstone.entity.result.Result;
 import lucafavaretto.Capstone.entity.role.Role;
+import lucafavaretto.Capstone.entity.task.Task;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +37,7 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private String avatar;
+    private int rating;
 
     @ManyToMany
     @JoinTable(
@@ -39,6 +45,27 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_courses",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "courses_id"))
+    private Set<InternalCourses> internalCourses = new HashSet<>();
+
+    @OneToOne(mappedBy = "user")
+    private Contract contract;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Presence> presences;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Result> results;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Task> task;
+
+
 
     public User(String name, String surname, String username,String email, String password,  String avatar) {
         this.name = name;
@@ -48,6 +75,7 @@ public class User implements UserDetails {
         this.password = password;
         this.avatar = avatar;
 
+        this.rating=7;
     }
 
     @Override
@@ -59,8 +87,6 @@ public class User implements UserDetails {
     public void addRole(Role role) {
         this.roles.add(role);
     }
-
-
 
     @Override
     public boolean isAccountNonExpired() {

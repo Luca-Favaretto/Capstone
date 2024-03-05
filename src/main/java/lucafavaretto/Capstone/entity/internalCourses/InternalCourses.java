@@ -1,5 +1,6 @@
-package lucafavaretto.Capstone.entity.role;
+package lucafavaretto.Capstone.entity.internalCourses;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,22 +15,24 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "role")
-public class Role {
+@Table(name = "internal_courses")
+public class InternalCourses {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
-    private String role;
+    private String title;
+    private int hours;
     @ManyToMany
     @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "role_id"),
+            name = "user_courses",
+            joinColumns = @JoinColumn(name = "courses_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users = new HashSet<>();
 
-    public Role(String role, Set<User> users) {
-        this.role = role;
-        this.users = users;
+    public InternalCourses(String title, int hours) {
+        this.title = title;
+        this.hours = hours;
     }
+
 }
