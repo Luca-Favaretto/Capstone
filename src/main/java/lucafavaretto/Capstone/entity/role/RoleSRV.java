@@ -17,6 +17,7 @@ import java.util.UUID;
 public class RoleSRV {
     @Autowired
     RoleDAO roleDAO;
+
     public Page<Role> getAll(int pageNumber, int pageSize, String orderBy) {
         if (pageNumber > 20) pageSize = 20;
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(orderBy));
@@ -27,13 +28,14 @@ public class RoleSRV {
         return roleDAO.findById(UUID.fromString(String.valueOf(id))).orElseThrow(() -> new NotFoundException(String.valueOf(id)));
     }
 
-    public Role findByRole(String role){
-        return roleDAO.findByRole(role).orElseThrow(()->new NotFoundException(role));
+    public Role findByRole(String role) {
+        return roleDAO.findByRole(role).orElseThrow(() -> new NotFoundException(role));
     }
 
     public Role save(RoleDTO roleDTO) {
-        if (roleDAO.existsByRole(roleDTO.role())) throw new BadRequestException("role already exist");
-        Role role = new Role(roleDTO.role());
+        String upper = roleDTO.role().toUpperCase();
+        if (roleDAO.existsByRole(upper)) throw new BadRequestException("role already exist");
+        Role role = new Role(upper);
         return roleDAO.save(role);
     }
 

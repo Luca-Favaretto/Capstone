@@ -28,27 +28,26 @@ public class RoleCTRL {
                              @RequestParam(defaultValue = "role") String orderBy) {
         return roleSRV.getAll(pageNumber, pageSize, orderBy);
     }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Role save(@RequestBody @Validated RoleDTO roleDTO, BindingResult validation) throws IOException {
+    public Role save(@RequestBody @Validated RoleDTO roleDTO, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
         return this.roleSRV.save(roleDTO);
     }
+
     @GetMapping("/{id}")
     public Role findById(@PathVariable UUID id) {
         return roleSRV.findById(id);
     }
 
 
-
     @GetMapping("/roleName")
-
     public Role getCurrentUser(@PathVariable String role) {
         return roleSRV.findByRole(role);
     }
-
 
 
     @DeleteMapping("/{id}")
