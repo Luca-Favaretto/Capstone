@@ -31,9 +31,10 @@ public class Presence {
     private User user;
 
 
-    public Presence(LocalDate date, LocalDate startingHour, User user) {
+    public Presence(LocalDate date, LocalDate startingHour, AbstinenceStatus abstinenceStatus, User user) {
         this.date = date;
         this.startingHour = startingHour;
+        this.abstinenceStatus = abstinenceStatus;
         this.user = user;
     }
 
