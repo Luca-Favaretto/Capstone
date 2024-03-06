@@ -25,7 +25,7 @@ public class Contract {
     private int weeklyHours;
     private double retribution;
     private LocalDate startingDate;
-    private boolean finishDate;
+    private LocalDate finishDate;
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -36,6 +36,6 @@ public class Contract {
         this.retribution = retribution;
         this.startingDate = startingDate;
         this.user = user;
-        this.finishDate = true;
+
     }
 }

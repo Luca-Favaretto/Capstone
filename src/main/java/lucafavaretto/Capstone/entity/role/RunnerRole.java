@@ -13,18 +13,20 @@ public class RunnerRole implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
         if (!roleDAO.existsByRole("USER")) {
-            Role user = roleSRV.save(new RoleDTO("USER"));
+            roleSRV.save(new RoleDTO("USER"));
         }
-        ;
+
         if (!roleDAO.existsByRole("MANAGER")) {
-            Role user = roleSRV.save(new RoleDTO("MANAGER"));
+            roleSRV.save(new RoleDTO("MANAGER"));
         }
-        ;
+
         if (!roleDAO.existsByRole("ADMIN")) {
-            Role user = roleSRV.save(new RoleDTO("ADMIN"));
+            roleSRV.save(new RoleDTO("ADMIN"));
         }
-        ;
 
     }
+
+
 }
