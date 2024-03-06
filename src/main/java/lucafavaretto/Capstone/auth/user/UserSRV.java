@@ -2,6 +2,8 @@ package lucafavaretto.Capstone.auth.user;
 
 
 import lucafavaretto.Capstone.configuration.EmailSender;
+import lucafavaretto.Capstone.entity.role.Role;
+import lucafavaretto.Capstone.entity.role.RoleSRV;
 import lucafavaretto.Capstone.exceptions.BadRequestException;
 import lucafavaretto.Capstone.exceptions.NotFoundException;
 import lucafavaretto.Capstone.exceptions.UnauthorizedException;
@@ -20,6 +22,8 @@ import java.util.UUID;
 public class UserSRV {
     @Autowired
     UserDAO userDAO;
+    @Autowired
+    RoleSRV roleSRV;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -39,6 +43,7 @@ public class UserSRV {
     public User save(UserDTO userDTO) throws IOException {
         if (userDAO.existsByEmail(userDTO.email())) throw new BadRequestException("email already exist");
         User user = new User(userDTO.name(), userDTO.surname(), userDTO.username(), passwordEncoder.encode(userDTO.password()), userDTO.email(), userDTO.name()+userDTO.surname());
+        user.addRole(roleSRV.findByRole("USER"));
     //    emailSender.sendRegistrationEmail(userDTO);
         return userDAO.save(user);
     }

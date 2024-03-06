@@ -1,0 +1,60 @@
+package lucafavaretto.Capstone.entity.role;
+
+import lucafavaretto.Capstone.auth.user.User;
+import lucafavaretto.Capstone.auth.user.UserDTO;
+import lucafavaretto.Capstone.auth.user.UserSRV;
+import lucafavaretto.Capstone.exceptions.BadRequestException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/roles")
+public class RoleCTRL {
+    @Autowired
+    RoleSRV roleSRV;
+
+    @GetMapping
+    public Page<Role> getAll(@RequestParam(defaultValue = "0") int pageNumber,
+                             @RequestParam(defaultValue = "10") int pageSize,
+                             @RequestParam(defaultValue = "role") String orderBy) {
+        return roleSRV.getAll(pageNumber, pageSize, orderBy);
+    }
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Role save(@RequestBody @Validated RoleDTO roleDTO, BindingResult validation) throws IOException {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
+        return this.roleSRV.save(roleDTO);
+    }
+    @GetMapping("/{id}")
+    public Role findById(@PathVariable UUID id) {
+        return roleSRV.findById(id);
+    }
+
+
+
+    @GetMapping("/roleName")
+
+    public Role getCurrentUser(@PathVariable String role) {
+        return roleSRV.findByRole(role);
+    }
+
+
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAuthorById(@PathVariable UUID id) {
+        roleSRV.deleteById(id);
+    }
+}

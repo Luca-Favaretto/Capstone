@@ -1,5 +1,6 @@
 package lucafavaretto.Capstone.entity.role;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,14 +23,14 @@ public class Role {
     private UUID id;
     private String role;
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users = new HashSet<>();
 
-    public Role(String role, Set<User> users) {
+    public Role(String role) {
         this.role = role;
-        this.users = users;
     }
 }
