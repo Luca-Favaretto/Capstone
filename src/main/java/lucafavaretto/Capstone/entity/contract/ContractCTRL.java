@@ -30,11 +30,11 @@ public class ContractCTRL {
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Contract save(@RequestBody @Validated ContractDTO contractDTO, @PathVariable UUID userId, BindingResult validation) {
+    public Contract save(@RequestBody @Validated ContractDTO contractDTO, @PathVariable UUID id, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
-        return this.contractSRV.save(contractDTO, userId);
+        return this.contractSRV.save(contractDTO, id);
     }
 
     @GetMapping("/{id}")
