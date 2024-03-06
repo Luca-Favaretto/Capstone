@@ -1,12 +1,14 @@
 package lucafavaretto.Capstone.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestControllerAdvice
@@ -51,6 +53,13 @@ public class ExceptionsHandler {
         return new ErrorsPayload("Not authorized for this endpoint", LocalDateTime.now());
     }
 
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
+//    public ErrorsPayload handleUnauthorized(HttpMessageNotReadableException ex) {
+//        List<String> errorList = new ArrayList<>();
+//        errorList.add(ex.getMessage());
+//        return new ErrorsPayloadWithList("Your role is probably not authorized for this operation", LocalDateTime.now(), errorList);
+//    }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
