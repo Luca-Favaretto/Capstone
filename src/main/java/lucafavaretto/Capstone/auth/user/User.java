@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @Table(name = "user")
-@JsonIgnoreProperties({"password", "credentialsNonExpired", "accountNonExpired", "authorities",  "accountNonLocked", "enabled"})
+@JsonIgnoreProperties({"password", "credentialsNonExpired", "accountNonExpired", "authorities", "accountNonLocked", "enabled"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -66,8 +66,7 @@ public class User implements UserDetails {
     private Set<Task> task;
 
 
-
-    public User(String name, String surname, String username,String email, String password,  String avatar) {
+    public User(String name, String surname, String username, String password, String email, String avatar) {
         this.name = name;
         this.surname = surname;
         this.username = username;
@@ -75,7 +74,7 @@ public class User implements UserDetails {
         this.password = password;
         this.avatar = avatar;
 
-        this.rating=7;
+        this.rating = 7;
     }
 
     @Override
@@ -84,6 +83,7 @@ public class User implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority(role.getRole()))
                 .collect(Collectors.toList());
     }
+
     public void addRole(Role role) {
         this.roles.add(role);
     }
