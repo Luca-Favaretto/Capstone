@@ -29,7 +29,7 @@ public class RoleSRV {
     }
 
     public Role findByRole(String role) {
-        return roleDAO.findByRole(role).orElseThrow(() -> new NotFoundException(role));
+        return roleDAO.findByRole(role.toUpperCase()).orElseThrow(() -> new NotFoundException(role));
     }
 
     public Role save(RoleDTO roleDTO) {

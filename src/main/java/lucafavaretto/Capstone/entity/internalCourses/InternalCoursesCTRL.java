@@ -28,7 +28,7 @@ public class InternalCoursesCTRL {
     @GetMapping
     public Page<InternalCourses> getAll(@RequestParam(defaultValue = "0") int pageNumber,
                                         @RequestParam(defaultValue = "10") int pageSize,
-                                        @RequestParam(defaultValue = "name") String orderBy) {
+                                        @RequestParam(defaultValue = "title") String orderBy) {
         return internalCoursesSRV.getAll(pageNumber, pageSize, orderBy);
     }
 
@@ -47,13 +47,13 @@ public class InternalCoursesCTRL {
     }
 
 
-    @PutMapping("me/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('USER')")
     public InternalCourses findByIdAndUpdate(@PathVariable UUID id, @RequestBody InternalCoursesDTO internalCoursesDTO) {
         return internalCoursesSRV.findByIdAndUpdate(id, internalCoursesDTO);
     }
 
-    @DeleteMapping("me/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAuthorById(@PathVariable UUID id) {

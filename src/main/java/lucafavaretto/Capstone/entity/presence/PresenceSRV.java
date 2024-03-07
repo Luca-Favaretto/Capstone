@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Service
@@ -35,18 +36,18 @@ public class PresenceSRV {
                 .orElseThrow(() -> new NotFoundException(String.valueOf(id)));
     }
 
-    public Presence saveStartingHour(PresenceDTO presenceDTO, User user) {
-        if (presenceDAO.existsByDateAndUser(presenceDTO.date(), user))
+    public Presence saveStartingHour(User user) {
+        if (presenceDAO.existsByDateAndUser(LocalDate.now(), user))
             throw new BadRequestException("date already update");
-        return presenceDAO.save(new Presence(presenceDTO.date(), LocalDate.now(), AbstinenceStatus.PRESENT, user));
+        return presenceDAO.save(new Presence(LocalDate.now(), LocalTime.now(), AbstinenceStatus.PRESENT, user));
     }
 
-    public Presence saveFinishHour(UUID id, User user) {
+    public Presence saveFinishHour(User user, UUID id) {
         Presence presence = findById(id);
-        if (presence.getUser().equals(user))
-            presence.setFinishHour(LocalDate.now());
+        if (presence.getUser().equals(user)) {
+            presence.setFinishHour(LocalTime.now());
+        } else throw new BadRequestException("Presence don't connect with user");
         return presenceDAO.save(presence);
-
     }
 
     public Presence saveAbstinence(PresenceAbstinenceDTO presenceAbstinenceDTO, User user) {

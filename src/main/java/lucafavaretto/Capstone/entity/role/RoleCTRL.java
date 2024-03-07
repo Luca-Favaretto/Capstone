@@ -44,9 +44,9 @@ public class RoleCTRL {
     }
 
 
-    @GetMapping("/roleName")
-    public Role getCurrentUser(@PathVariable String role) {
-        return roleSRV.findByRole(role);
+    @GetMapping("/roleName/{name}")
+    public Role getCurrentUser(@PathVariable String name) {
+        return roleSRV.findByRole(name);
     }
 
 

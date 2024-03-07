@@ -6,6 +6,7 @@ import lucafavaretto.Capstone.enums.AbstinenceStatus;
 import java.time.LocalDate;
 
 public record PresenceAbstinenceDTO(
-        LocalDate date, AbstinenceStatus abstinenceStatus
+        LocalDate date,
+        AbstinenceStatus abstinenceStatus
 ) {
 }

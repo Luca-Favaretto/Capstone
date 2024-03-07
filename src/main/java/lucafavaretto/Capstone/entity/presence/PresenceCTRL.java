@@ -27,22 +27,25 @@ public class PresenceCTRL {
         return presenceSRV.getAll(pageNumber, pageSize, orderBy);
     }
 
-    @PostMapping
+    @PostMapping("/start")
     @ResponseStatus(HttpStatus.CREATED)
-    public Presence saveStartingHour(@AuthenticationPrincipal User user, @RequestBody @Validated PresenceDTO presenceDTO, BindingResult validation) {
-        if (validation.hasErrors()) {
-            throw new BadRequestException(validation.getAllErrors());
-        }
-        return this.presenceSRV.saveStartingHour(presenceDTO, user);
+    public Presence saveStartingHour(@AuthenticationPrincipal User user) {
+        return this.presenceSRV.saveStartingHour(user);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/finish/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Presence saveFinishHour(@AuthenticationPrincipal User user, @RequestBody @Validated UUID id, BindingResult validation) {
+    public Presence saveFinishHour(@AuthenticationPrincipal User user, @PathVariable UUID id) {
+        return this.presenceSRV.saveFinishHour(user, id);
+    }
+
+    @PostMapping("/abstinence")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Presence saveFinishHour(@AuthenticationPrincipal User user, @RequestBody @Validated PresenceAbstinenceDTO presenceAbstinenceDTO, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
-        return this.presenceSRV.saveFinishHour(id, user);
+        return this.presenceSRV.saveAbstinence(presenceAbstinenceDTO, user);
     }
 
     @GetMapping("/{id}")

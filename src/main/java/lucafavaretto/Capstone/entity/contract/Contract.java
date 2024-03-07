@@ -1,5 +1,6 @@
 package lucafavaretto.Capstone.entity.contract;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class Contract {
     private double retribution;
     private LocalDate startingDate;
     private LocalDate finishDate;
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;

@@ -8,6 +8,7 @@ import lucafavaretto.Capstone.auth.user.User;
 import lucafavaretto.Capstone.enums.AbstinenceStatus;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
@@ -21,8 +22,8 @@ public class Presence {
     @Column(name = "id", nullable = false)
     private UUID id;
     private LocalDate date;
-    private LocalDate startingHour;
-    private LocalDate finishHour;
+    private LocalTime startingHour;
+    private LocalTime finishHour;
     @Enumerated(EnumType.STRING)
     private AbstinenceStatus abstinenceStatus;
 
@@ -31,7 +32,7 @@ public class Presence {
     private User user;
 
 
-    public Presence(LocalDate date, LocalDate startingHour, AbstinenceStatus abstinenceStatus, User user) {
+    public Presence(LocalDate date, LocalTime startingHour, AbstinenceStatus abstinenceStatus, User user) {
         this.date = date;
         this.startingHour = startingHour;
         this.abstinenceStatus = abstinenceStatus;
