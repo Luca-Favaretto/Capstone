@@ -1,5 +1,6 @@
 package lucafavaretto.Capstone.auth.user;
 
+import lucafavaretto.Capstone.entity.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -15,10 +16,11 @@ public class UserCTRL {
     @Autowired
     UserSRV userSRV;
 
+
     @GetMapping
     public Page<User> getAll(@RequestParam(defaultValue = "0") int pageNumber,
-                              @RequestParam(defaultValue = "10") int pageSize,
-                              @RequestParam(defaultValue = "name") String orderBy) {
+                             @RequestParam(defaultValue = "10") int pageSize,
+                             @RequestParam(defaultValue = "name") String orderBy) {
         return userSRV.getAll(pageNumber, pageSize, orderBy);
     }
 
@@ -33,17 +35,32 @@ public class UserCTRL {
     }
 
 
-    @PutMapping("me/{id}")
+    @PutMapping("/me/{id}")
     @PreAuthorize("hasAuthority('USER')")
     public User findByIdAndUpdate(@PathVariable UUID id, @RequestBody UserDTO eventDTO, @AuthenticationPrincipal User currentAuthenticatedUser) {
         return userSRV.findByIdAndUpdate(id, eventDTO, currentAuthenticatedUser);
     }
 
-    @DeleteMapping("me/{id}")
+    @DeleteMapping("/me/{id}")
     @PreAuthorize("hasAuthority('USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAuthorById(@PathVariable UUID id, @AuthenticationPrincipal User currentAuthenticatedUser) {
         userSRV.deleteById(id, currentAuthenticatedUser);
+    }
+
+    @PatchMapping("/addMeCourse/{id}")
+    public void newCourse(@PathVariable UUID id, @AuthenticationPrincipal User currentAuthenticatedUser) {
+        userSRV.newCourse(id, currentAuthenticatedUser);
+    }
+
+    @PostMapping("/completeCourses/{id}")
+    public void completeInternalCourses(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+        userSRV.completeInternalCourses(id, user);
+    }
+
+    @PostMapping("/completeTask/{id}")
+    public void completeTask(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+        userSRV.completeTask(id, user);
     }
 
 

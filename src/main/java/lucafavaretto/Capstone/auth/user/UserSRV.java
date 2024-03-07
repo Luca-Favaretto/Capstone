@@ -2,11 +2,21 @@ package lucafavaretto.Capstone.auth.user;
 
 
 import lucafavaretto.Capstone.configuration.EmailSender;
+import lucafavaretto.Capstone.entity.internalCourses.InternalCourses;
+import lucafavaretto.Capstone.entity.internalCourses.InternalCoursesDAO;
+import lucafavaretto.Capstone.entity.internalCourses.InternalCoursesSRV;
+import lucafavaretto.Capstone.entity.result.Result;
+import lucafavaretto.Capstone.entity.result.ResultDTO;
+import lucafavaretto.Capstone.entity.result.ResultSRV;
 import lucafavaretto.Capstone.entity.role.Role;
 import lucafavaretto.Capstone.entity.role.RoleSRV;
+import lucafavaretto.Capstone.entity.task.Task;
+import lucafavaretto.Capstone.entity.task.TaskDAO;
+import lucafavaretto.Capstone.entity.task.TaskSRV;
 import lucafavaretto.Capstone.exceptions.BadRequestException;
 import lucafavaretto.Capstone.exceptions.NotFoundException;
 import lucafavaretto.Capstone.exceptions.UnauthorizedException;
+import org.hibernate.Internal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -23,10 +34,18 @@ public class UserSRV {
     @Autowired
     UserDAO userDAO;
     @Autowired
+    TaskDAO taskDAO;
+    @Autowired
+    InternalCoursesDAO internalCoursesDAO;
+    @Autowired
     RoleSRV roleSRV;
+    @Autowired
+    ResultSRV resultSRV;
 
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    InternalCoursesSRV internalCoursesSRV;
     @Autowired
     EmailSender emailSender;
 
@@ -42,17 +61,18 @@ public class UserSRV {
 
     public User save(UserDTO userDTO) throws IOException {
         if (userDAO.existsByEmail(userDTO.email())) throw new BadRequestException("email already exist");
-        User user = new User(userDTO.name(), userDTO.surname(), userDTO.username(), passwordEncoder.encode(userDTO.password()), userDTO.email(), userDTO.name()+userDTO.surname());
+        User user = new User(userDTO.name(), userDTO.surname(), userDTO.username(), passwordEncoder.encode(userDTO.password()), userDTO.email(), userDTO.name() + userDTO.surname());
         user.addRole(roleSRV.findByRole("USER"));
-    //    emailSender.sendRegistrationEmail(userDTO);
+        //    emailSender.sendRegistrationEmail(userDTO);
         return userDAO.save(user);
     }
 
     public User findByEmail(String email) {
-        return userDAO.findByEmail(email).orElseThrow(() -> new NotFoundException(email ));
+        return userDAO.findByEmail(email).orElseThrow(() -> new NotFoundException(email));
     }
-    public User findByIdAndUpdate(UUID id, UserDTO userDTO,User user){
-        User found= findById(UUID.fromString(String.valueOf(id)));
+
+    public User findByIdAndUpdate(UUID id, UserDTO userDTO, User user) {
+        User found = findById(UUID.fromString(String.valueOf(id)));
         if (!user.getId().equals(found.getId())) throw new UnauthorizedException("User with wrong id");
         found.setName(userDTO.name());
         found.setSurname(userDTO.surname());
@@ -61,9 +81,34 @@ public class UserSRV {
         found.setEmail(userDTO.email());
         return userDAO.save(found);
     }
+
     public void deleteById(UUID id, User user) {
         User found = findById(id);
-        if (!user.getId().equals(UUID.fromString(String.valueOf(id)))) throw new UnauthorizedException("User with wrong id");
+        if (!user.getId().equals(UUID.fromString(String.valueOf(id))))
+            throw new UnauthorizedException("User with wrong id");
         userDAO.delete(found);
+    }
+
+    public void newCourse(UUID id, User user) {
+        InternalCourses courses = internalCoursesSRV.findById(id);
+        user.addCourse(courses);
+        userDAO.save(user);
+    }
+
+
+    public void completeInternalCourses(UUID id, User user) {
+        InternalCourses found = internalCoursesSRV.findById(id);
+        ResultDTO resultDTO = new ResultDTO(found.getTitle(), "Internal course during " + found.getHours() + " hours");
+        User foundUser = findById(user.getId());
+        foundUser.removeCourses(found);
+        userDAO.save(foundUser);
+        resultSRV.save(resultDTO, foundUser);
+    }
+
+    public void completeTask(UUID id, User user) {
+        Task found = taskDAO.findById(id).orElseThrow(() -> new NotFoundException("task don't found"));
+        ResultDTO resultDTO = new ResultDTO(found.getTitle(), "Task description : " + found.getDescription());
+        taskDAO.delete(found);
+        resultSRV.save(resultDTO, user);
     }
 }

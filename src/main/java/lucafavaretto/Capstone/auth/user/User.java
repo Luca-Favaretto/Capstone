@@ -48,12 +48,13 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_courses",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "courses_id"))
-    private Set<InternalCourses> internalCourses = new HashSet<>();
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "user_courses",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "courses_id"))
+//    private Set<InternalCourses> internalCourses = new LinkedHashSet<>();
+
 
     @OneToOne(mappedBy = "user")
     private Contract contract;
@@ -67,6 +68,11 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private Set<Task> task;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_internalCourses",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "internalCourses_id"))
+    private Set<InternalCourses> internalCourses = new LinkedHashSet<>();
 
     public User(String name, String surname, String username, String password, String email, String avatar) {
         this.name = name;
@@ -90,6 +96,20 @@ public class User implements UserDetails {
 
     public void addRole(Role role) {
         this.roles.add(role);
+    }
+
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+        role.getUsers().remove(this);
+    }
+
+    public void addCourse(InternalCourses courses) {
+        this.internalCourses.add(courses);
+    }
+
+    public void removeCourses(InternalCourses courses) {
+        this.internalCourses.remove(courses);
+        courses.getUsers().remove(this);
     }
 
     @Override

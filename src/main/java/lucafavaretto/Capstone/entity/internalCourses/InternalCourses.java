@@ -8,6 +8,7 @@ import lombok.Setter;
 import lucafavaretto.Capstone.auth.user.User;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,13 +24,10 @@ public class InternalCourses {
     private UUID id;
     private String title;
     private int hours;
-    
-    @ManyToMany
-    @JoinTable(
-            name = "user_courses",
-            joinColumns = @JoinColumn(name = "courses_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> users = new HashSet<>();
+
+    @ManyToMany(mappedBy = "internalCourses")
+    private Set<User> users = new LinkedHashSet<>();
+
 
     public InternalCourses(String title, int hours) {
         this.title = title;

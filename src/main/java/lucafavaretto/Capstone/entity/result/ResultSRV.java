@@ -1,6 +1,7 @@
 package lucafavaretto.Capstone.entity.result;
 
 import lucafavaretto.Capstone.auth.user.User;
+import lucafavaretto.Capstone.auth.user.UserDAO;
 import lucafavaretto.Capstone.entity.internalCourses.InternalCourses;
 import lucafavaretto.Capstone.entity.internalCourses.InternalCoursesDAO;
 import lucafavaretto.Capstone.entity.internalCourses.InternalCoursesSRV;
@@ -24,14 +25,7 @@ import java.util.UUID;
 public class ResultSRV {
     @Autowired
     ResultDAO resultDAO;
-    @Autowired
-    TaskDAO taskDAO;
-    @Autowired
-    InternalCoursesDAO internalCoursesDAO;
-    @Autowired
-    InternalCoursesSRV internalCoursesSRV;
-    @Autowired
-    TaskSRV taskSRV;
+
 
     public Page<Result> getAll(int pageNumber, int pageSize, String orderBy) {
         if (pageNumber > 20) pageSize = 20;
@@ -45,6 +39,8 @@ public class ResultSRV {
     }
 
     public Result save(ResultDTO resultDTO, User user) {
+        if (resultDAO.existsByUserAndTitle(user, resultDTO.title()))
+            throw new BadRequestException("Result already exist");
         Result result = new Result(resultDTO.title(), resultDTO.description(), user);
         result.setDate(LocalDate.now());
         return resultDAO.save(result);
@@ -63,18 +59,5 @@ public class ResultSRV {
         resultDAO.delete(found);
     }
 
-    public Result completeInternalCourses(UUID id, User user) {
-        InternalCourses found = internalCoursesSRV.findById(id);
-        ResultDTO resultDTO = new ResultDTO(found.getTitle(), "Internal course during " + found.getHours() + " hours");
-        internalCoursesDAO.delete(found);
-        return save(resultDTO, user);
-    }
-
-    public Result completeTask(UUID id, User user) {
-        Task found = taskSRV.findById(id);
-        ResultDTO resultDTO = new ResultDTO(found.getTitle(), "Task description : " + found.getDescription());
-        taskDAO.delete(found);
-        return save(resultDTO, user);
-    }
 
 }
