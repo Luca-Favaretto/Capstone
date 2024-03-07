@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lucafavaretto.Capstone.auth.user.User;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -18,6 +19,7 @@ public class Result {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
+    private LocalDate date;
     private String title;
     private String description;
 
