@@ -23,6 +23,7 @@ public class InternalCourses {
     private UUID id;
     private String title;
     private int hours;
+    
     @ManyToMany
     @JoinTable(
             name = "user_courses",

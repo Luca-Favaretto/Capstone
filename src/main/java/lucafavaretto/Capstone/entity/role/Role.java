@@ -23,7 +23,6 @@ public class Role {
     private UUID id;
     private String role;
     @ManyToMany
-    @JsonIgnore
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "role_id"),

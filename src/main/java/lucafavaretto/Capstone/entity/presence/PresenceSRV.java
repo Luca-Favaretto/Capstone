@@ -44,9 +44,9 @@ public class PresenceSRV {
 
     public Presence saveFinishHour(User user, UUID id) {
         Presence presence = findById(id);
-        if (presence.getUser().equals(user)) {
+        if (presence.getUser().getId().equals(user.getId())) {
             presence.setFinishHour(LocalTime.now());
-        } else throw new BadRequestException("Presence don't connect with user");
+        } else throw new BadRequestException("Presence don't connect with user" + user.getId());
         return presenceDAO.save(presence);
     }
 

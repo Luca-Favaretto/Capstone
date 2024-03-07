@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @Table(name = "user")
-@JsonIgnoreProperties({"password", "credentialsNonExpired", "accountNonExpired", "authorities", "accountNonLocked", "enabled"})
+@JsonIgnoreProperties({"password", "credentialsNonExpired", "accountNonExpired", "authorities", "roles", "accountNonLocked", "enabled", "internalCourses", "presences", "results", "task"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue

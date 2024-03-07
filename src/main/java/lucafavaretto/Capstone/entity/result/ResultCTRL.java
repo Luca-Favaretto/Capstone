@@ -58,4 +58,15 @@ public class ResultCTRL {
         resultSRV.deleteById(id);
     }
 
+    @PostMapping("/completeInternalCourses/{id}")
+    public Result completeInternalCourses(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+        return resultSRV.completeInternalCourses(id, user);
+    }
+
+    @PostMapping("/completeTask/{id}")
+    public Result completeTask(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+        return resultSRV.completeTask(id, user);
+    }
+
+
 }

@@ -2,6 +2,9 @@ package lucafavaretto.Capstone.entity.internalCourses;
 
 import lucafavaretto.Capstone.auth.user.User;
 import lucafavaretto.Capstone.auth.user.UserDTO;
+import lucafavaretto.Capstone.entity.result.Result;
+import lucafavaretto.Capstone.entity.result.ResultDTO;
+import lucafavaretto.Capstone.entity.result.ResultSRV;
 import lucafavaretto.Capstone.exceptions.BadRequestException;
 import lucafavaretto.Capstone.exceptions.NotFoundException;
 import lucafavaretto.Capstone.exceptions.UnauthorizedException;
@@ -19,6 +22,7 @@ import java.util.UUID;
 public class InternalCoursesSRV {
     @Autowired
     InternalCoursesDAO internalCoursesDAO;
+
 
     public Page<InternalCourses> getAll(int pageNumber, int pageSize, String orderBy) {
         if (pageNumber > 20) pageSize = 20;
@@ -48,4 +52,5 @@ public class InternalCoursesSRV {
         InternalCourses found = findById(id);
         internalCoursesDAO.delete(found);
     }
+
 }
