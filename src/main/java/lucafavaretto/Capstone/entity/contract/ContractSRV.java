@@ -36,6 +36,7 @@ public class ContractSRV {
 
     public Contract save(ContractDTO contractDTO, UUID userId) {
         User found = userSRV.findById(userId);
+        if (contractDAO.existsByUser(found)) throw new BadRequestException("User can have only one contract");
         Contract contract = new Contract(contractDTO.contractTypology(), contractDTO.weeklyHours(), contractDTO.retribution(), contractDTO.startingDate(), found);
         return contractDAO.save(contract);
     }

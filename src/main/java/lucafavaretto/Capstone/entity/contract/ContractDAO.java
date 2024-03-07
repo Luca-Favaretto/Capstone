@@ -1,10 +1,17 @@
 package lucafavaretto.Capstone.entity.contract;
 
+import lucafavaretto.Capstone.auth.user.User;
+import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Repository
 public interface ContractDAO extends JpaRepository<Contract, UUID> {
+
+    @Query("SELECT COUNT(c)>0 FROM Contract c WHERE c.user=:user")
+    boolean existsByUser(User user);
 }
