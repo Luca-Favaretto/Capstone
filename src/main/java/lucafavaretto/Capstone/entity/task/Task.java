@@ -27,9 +27,10 @@ public class Task {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Task(String title, String description, LocalDate expirationDate) {
+    public Task(String title, String description, LocalDate expirationDate, User user) {
         this.title = title;
         this.description = description;
         this.expirationDate = expirationDate;
+        this.user = user;
     }
 }
