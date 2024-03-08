@@ -22,6 +22,7 @@ public class Role {
     @Column(name = "id", nullable = false)
     private UUID id;
     private String role;
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "user_roles",

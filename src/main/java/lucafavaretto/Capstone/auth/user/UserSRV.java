@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -107,8 +108,22 @@ public class UserSRV {
 
     public void completeTask(UUID id, User user) {
         Task found = taskDAO.findById(id).orElseThrow(() -> new NotFoundException("task don't found"));
-        ResultDTO resultDTO = new ResultDTO(found.getTitle(), "Task description : " + found.getDescription());
+        ResultDTO resultDTO = new ResultDTO(found.getTitle() + LocalDate.now(), "Task description : " + found.getDescription());
         taskDAO.delete(found);
         resultSRV.save(resultDTO, user);
+    }
+
+    public void addRole(UUID id, String name) {
+        Role role = roleSRV.findByRole(name);
+        User foundUser = findById(id);
+        foundUser.addRole(role);
+        userDAO.save(foundUser);
+    }
+
+    public void removeRole(UUID id, String name) {
+        Role role = roleSRV.findByRole(name);
+        User foundUser = findById(id);
+        foundUser.removeRole(role);
+        userDAO.save(foundUser);
     }
 }

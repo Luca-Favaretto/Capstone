@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @Table(name = "user")
-@JsonIgnoreProperties({"password", "credentialsNonExpired", "accountNonExpired", "authorities", "roles", "accountNonLocked", "enabled", "internalCourses", "presences", "results", "task"})
+@JsonIgnoreProperties({"password", "credentialsNonExpired", "accountNonExpired", "authorities", "accountNonLocked", "enabled", "internalCourses", "presences", "results", "task"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -47,13 +47,6 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "user_courses",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "courses_id"))
-//    private Set<InternalCourses> internalCourses = new LinkedHashSet<>();
 
 
     @OneToOne(mappedBy = "user")

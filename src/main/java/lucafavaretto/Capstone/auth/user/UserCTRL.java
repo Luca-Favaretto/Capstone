@@ -63,5 +63,17 @@ public class UserCTRL {
         userSRV.completeTask(id, user);
     }
 
+    @PatchMapping("/addRole/{id}")
+    public void addRole(@PathVariable UUID id,
+                        @RequestParam(name = "param") String param) {
+        userSRV.addRole(id, param);
+    }
+
+    @PatchMapping("/removeRole/{id}")
+    public void removeRole(@PathVariable UUID id,
+                           @RequestParam(name = "param") String param) {
+        userSRV.removeRole(id, param);
+    }
+
 
 }

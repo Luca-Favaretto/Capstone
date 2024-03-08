@@ -60,5 +60,13 @@ public class InternalCoursesCTRL {
         internalCoursesSRV.deleteById(id);
     }
 
+    @GetMapping
+    public Page<InternalCourses> findNotCompletedInternalCourses(@RequestParam(defaultValue = "0") int pageNumber,
+                                                                 @RequestParam(defaultValue = "10") int pageSize,
+                                                                 @RequestParam(defaultValue = "title") String orderBy,
+                                                                 @AuthenticationPrincipal User user) {
+        return internalCoursesSRV.findNotCompletedInternalCourses(pageNumber, pageSize, orderBy, user);
+    }
+
 
 }

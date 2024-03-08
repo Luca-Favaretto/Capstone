@@ -53,4 +53,9 @@ public class InternalCoursesSRV {
         internalCoursesDAO.delete(found);
     }
 
+    public Page<InternalCourses> findNotCompletedInternalCourses(int pageNumber, int pageSize, String orderBy, User user) {
+        if (pageNumber > 20) pageSize = 20;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(orderBy));
+        return internalCoursesDAO.findNotCompletedInternalCourses(pageable, user);
+    }
 }
