@@ -1,6 +1,8 @@
 package lucafavaretto.Capstone.entity.internalCourses;
 
+import lucafavaretto.Capstone.auth.AuthSRV;
 import lucafavaretto.Capstone.auth.user.User;
+import lucafavaretto.Capstone.auth.user.UserDAO;
 import lucafavaretto.Capstone.auth.user.UserDTO;
 import lucafavaretto.Capstone.entity.result.Result;
 import lucafavaretto.Capstone.entity.result.ResultDTO;
@@ -23,6 +25,8 @@ public class InternalCoursesSRV {
     @Autowired
     InternalCoursesDAO internalCoursesDAO;
 
+    @Autowired
+    UserDAO userDAO;
 
     public Page<InternalCourses> getAll(int pageNumber, int pageSize, String orderBy) {
         if (pageNumber > 20) pageSize = 20;
@@ -56,6 +60,8 @@ public class InternalCoursesSRV {
     public Page<InternalCourses> findNotCompletedInternalCourses(int pageNumber, int pageSize, String orderBy, User user) {
         if (pageNumber > 20) pageSize = 20;
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(orderBy));
-        return internalCoursesDAO.findNotCompletedInternalCourses(pageable, user);
+        User found = userDAO.findById(user.getId()).orElseThrow(() -> new NotFoundException(user.getId()));
+
+        return internalCoursesDAO.findNotCompletedInternalCourses(pageable, found);
     }
 }
