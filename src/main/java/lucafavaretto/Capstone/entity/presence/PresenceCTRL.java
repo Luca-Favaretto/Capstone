@@ -1,6 +1,7 @@
 package lucafavaretto.Capstone.entity.presence;
 
 import lucafavaretto.Capstone.auth.user.User;
+import lucafavaretto.Capstone.entity.result.Result;
 import lucafavaretto.Capstone.exceptions.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -65,6 +66,14 @@ public class PresenceCTRL {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAuthorById(@PathVariable UUID id) {
         presenceSRV.deleteById(id);
+    }
+
+    @GetMapping("/me")
+    public Page<Presence> findByUser(@RequestParam(defaultValue = "0") int pageNumber,
+                                     @RequestParam(defaultValue = "10") int pageSize,
+                                     @RequestParam(defaultValue = "date") String orderBy,
+                                     @AuthenticationPrincipal User user) {
+        return presenceSRV.findByUser(pageNumber, pageSize, orderBy, user);
     }
 
 }

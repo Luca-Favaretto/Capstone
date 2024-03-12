@@ -2,6 +2,7 @@ package lucafavaretto.Capstone.entity.contract;
 
 import lucafavaretto.Capstone.auth.user.User;
 import lucafavaretto.Capstone.auth.user.UserDTO;
+import lucafavaretto.Capstone.entity.presence.Presence;
 import lucafavaretto.Capstone.exceptions.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,5 +55,11 @@ public class ContractCTRL {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAuthorById(@PathVariable UUID id) {
         contractSRV.deleteById(id);
+    }
+
+    @GetMapping("/me")
+    public Contract findByUser(
+            @AuthenticationPrincipal User user) {
+        return contractSRV.findByUser(user);
     }
 }

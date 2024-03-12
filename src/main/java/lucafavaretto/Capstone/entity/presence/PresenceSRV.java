@@ -4,6 +4,7 @@ import lucafavaretto.Capstone.auth.user.User;
 import lucafavaretto.Capstone.auth.user.UserSRV;
 import lucafavaretto.Capstone.entity.internalCourses.InternalCourses;
 import lucafavaretto.Capstone.entity.internalCourses.InternalCoursesDTO;
+import lucafavaretto.Capstone.entity.result.Result;
 import lucafavaretto.Capstone.enums.AbstinenceStatus;
 import lucafavaretto.Capstone.exceptions.BadRequestException;
 import lucafavaretto.Capstone.exceptions.NotFoundException;
@@ -69,6 +70,12 @@ public class PresenceSRV {
     public void deleteById(UUID id) {
         Presence found = findById(id);
         presenceDAO.delete(found);
+    }
+
+    public Page<Presence> findByUser(int pageNumber, int pageSize, String orderBy, User user) {
+        if (pageNumber > 20) pageSize = 20;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(orderBy));
+        return presenceDAO.findByUser(pageable, userSRV.findById(user.getId()));
     }
 
 

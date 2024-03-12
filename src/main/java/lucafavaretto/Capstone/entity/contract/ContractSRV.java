@@ -3,6 +3,7 @@ package lucafavaretto.Capstone.entity.contract;
 
 import lucafavaretto.Capstone.auth.user.User;
 import lucafavaretto.Capstone.auth.user.UserSRV;
+import lucafavaretto.Capstone.entity.presence.Presence;
 import lucafavaretto.Capstone.exceptions.BadRequestException;
 import lucafavaretto.Capstone.exceptions.NotFoundException;
 import lucafavaretto.Capstone.exceptions.UnauthorizedException;
@@ -60,5 +61,9 @@ public class ContractSRV {
         Contract found = findById(id);
         found.setFinishDate(LocalDate.now());
         return contractDAO.save(found);
+    }
+
+    public Contract findByUser(User user) {
+        return contractDAO.findByUser(userSRV.findById(user.getId())).orElseThrow(() -> new BadRequestException("User contract is null"));
     }
 }

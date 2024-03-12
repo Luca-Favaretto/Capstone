@@ -62,7 +62,7 @@ public class UserSRV {
 
     public User save(UserDTO userDTO) throws IOException {
         if (userDAO.existsByEmail(userDTO.email())) throw new BadRequestException("email already exist");
-        User user = new User(userDTO.name(), userDTO.surname(), userDTO.username(), passwordEncoder.encode(userDTO.password()), userDTO.email(), userDTO.name() + userDTO.surname());
+        User user = new User(userDTO.name(), userDTO.surname(), userDTO.username(), passwordEncoder.encode(userDTO.password()), userDTO.email(), userDTO.name() + userDTO.surname(), userDTO.rating());
         user.addRole(roleSRV.findByRole("USER"));
         //    emailSender.sendRegistrationEmail(userDTO);
         return userDAO.save(user);
@@ -80,6 +80,7 @@ public class UserSRV {
         found.setUsername(userDTO.username());
         found.setPassword(userDTO.password());
         found.setEmail(userDTO.email());
+        found.setRating(userDTO.rating());
         return userDAO.save(found);
     }
 

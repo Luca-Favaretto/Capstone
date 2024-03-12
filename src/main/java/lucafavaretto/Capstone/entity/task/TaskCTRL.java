@@ -1,5 +1,6 @@
 package lucafavaretto.Capstone.entity.task;
 
+import lucafavaretto.Capstone.auth.user.User;
 import lucafavaretto.Capstone.entity.presence.Presence;
 import lucafavaretto.Capstone.entity.presence.PresenceFullDTO;
 import lucafavaretto.Capstone.entity.role.Role;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,7 @@ public class TaskCTRL {
     @GetMapping
     public Page<Task> getAll(@RequestParam(defaultValue = "0") int pageNumber,
                              @RequestParam(defaultValue = "10") int pageSize,
-                             @RequestParam(defaultValue = "title") String orderBy) {
+                             @RequestParam(defaultValue = "expirationDate") String orderBy) {
         return taskSRV.getAll(pageNumber, pageSize, orderBy);
     }
 
@@ -43,7 +45,7 @@ public class TaskCTRL {
     }
 
 
-    @PutMapping("me/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('USER')")
     public Task findByIdAndUpdate(@PathVariable UUID id, @RequestBody TaskDTO taskDTO) {
         return taskSRV.findByIdAndUpdate(id, taskDTO);
@@ -56,5 +58,12 @@ public class TaskCTRL {
         taskSRV.deleteById(id);
     }
 
+    @GetMapping("/me")
+    public Page<Task> findByUser(@RequestParam(defaultValue = "0") int pageNumber,
+                                 @RequestParam(defaultValue = "10") int pageSize,
+                                 @RequestParam(defaultValue = "expirationDate") String orderBy,
+                                 @AuthenticationPrincipal User user) {
+        return taskSRV.findByUser(pageNumber, pageSize, orderBy, user);
+    }
 
 }

@@ -1,6 +1,9 @@
 package lucafavaretto.Capstone.entity.presence;
 
 import lucafavaretto.Capstone.auth.user.User;
+import lucafavaretto.Capstone.entity.task.Task;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,4 +16,7 @@ import java.util.UUID;
 public interface PresenceDAO extends JpaRepository<Presence, UUID> {
     @Query("SELECT COUNT(p)>0 FROM Presence p WHERE p.date=:date AND p.user=:user")
     boolean existsByDateAndUser(LocalDate date, User user);
+
+    @Query("SELECT r FROM Presence r WHERE r.user=:user")
+    Page<Presence> findByUser(Pageable pageable, User user);
 }

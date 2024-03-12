@@ -67,15 +67,14 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "internalCourses_id"))
     private Set<InternalCourses> internalCourses = new LinkedHashSet<>();
 
-    public User(String name, String surname, String username, String password, String email, String avatar) {
+    public User(String name, String surname, String username, String password, String email, String avatar, int rating) {
         this.name = name;
         this.surname = surname;
         this.username = username;
         this.email = email;
         this.password = password;
         this.avatar = avatar;
-
-        this.rating = 7;
+        this.rating = rating;
     }
 
     @Override

@@ -2,6 +2,7 @@ package lucafavaretto.Capstone.entity.result;
 
 import lucafavaretto.Capstone.auth.user.User;
 import lucafavaretto.Capstone.auth.user.UserDAO;
+import lucafavaretto.Capstone.auth.user.UserSRV;
 import lucafavaretto.Capstone.entity.internalCourses.InternalCourses;
 import lucafavaretto.Capstone.entity.internalCourses.InternalCoursesDAO;
 import lucafavaretto.Capstone.entity.internalCourses.InternalCoursesSRV;
@@ -25,6 +26,8 @@ import java.util.UUID;
 public class ResultSRV {
     @Autowired
     ResultDAO resultDAO;
+    @Autowired
+    UserDAO userDAO;
 
 
     public Page<Result> getAll(int pageNumber, int pageSize, String orderBy) {
@@ -57,6 +60,13 @@ public class ResultSRV {
     public void deleteById(UUID id) {
         Result found = findById(id);
         resultDAO.delete(found);
+    }
+
+    public Page<Result> findByUser(int pageNumber, int pageSize, String orderBy, User user) {
+        if (pageNumber > 20) pageSize = 20;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(orderBy));
+        User found = userDAO.findById(user.getId()).orElseThrow(() -> new NotFoundException(user.getId()));
+        return resultDAO.findByUser(pageable, found);
     }
 
 

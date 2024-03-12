@@ -1,6 +1,7 @@
 package lucafavaretto.Capstone.entity.result;
 
 import lucafavaretto.Capstone.auth.user.User;
+import lucafavaretto.Capstone.entity.task.Task;
 import lucafavaretto.Capstone.exceptions.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,4 +60,11 @@ public class ResultCTRL {
     }
 
 
+    @GetMapping("/me")
+    public Page<Result> findByUser(@RequestParam(defaultValue = "0") int pageNumber,
+                                   @RequestParam(defaultValue = "10") int pageSize,
+                                   @RequestParam(defaultValue = "title") String orderBy,
+                                   @AuthenticationPrincipal User user) {
+        return resultSRV.findByUser(pageNumber, pageSize, orderBy, user);
+    }
 }
