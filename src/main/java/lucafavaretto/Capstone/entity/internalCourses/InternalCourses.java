@@ -23,14 +23,16 @@ public class InternalCourses {
     @Column(name = "id", nullable = false)
     private UUID id;
     private String title;
+    private String description;
     private int hours;
 
     @ManyToMany(mappedBy = "internalCourses")
     private Set<User> users = new LinkedHashSet<>();
 
 
-    public InternalCourses(String title, int hours) {
+    public InternalCourses(String title, String description, int hours) {
         this.title = title;
+        this.description = description;
         this.hours = hours;
     }
 

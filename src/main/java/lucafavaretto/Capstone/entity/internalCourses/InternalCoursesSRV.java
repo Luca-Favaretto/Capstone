@@ -41,13 +41,14 @@ public class InternalCoursesSRV {
     public InternalCourses save(InternalCoursesDTO internalCoursesDTO) {
         if (internalCoursesDAO.existsByTitle(internalCoursesDTO.title()))
             throw new BadRequestException("title already exist");
-        return internalCoursesDAO.save(new InternalCourses(internalCoursesDTO.title(), internalCoursesDTO.hours()));
+        return internalCoursesDAO.save(new InternalCourses(internalCoursesDTO.title(), internalCoursesDTO.description(), internalCoursesDTO.hours()));
     }
 
 
     public InternalCourses findByIdAndUpdate(UUID id, InternalCoursesDTO internalCoursesDTO) {
         InternalCourses found = findById(id);
         found.setTitle(internalCoursesDTO.title());
+        found.setDescription(internalCoursesDTO.description());
         found.setHours(internalCoursesDTO.hours());
         return internalCoursesDAO.save(found);
     }
