@@ -54,7 +54,7 @@ public class PresenceSRV {
     public Presence saveAbstinence(PresenceAbstinenceDTO presenceAbstinenceDTO, User user) {
         if (presenceDAO.existsByDateAndUser(presenceAbstinenceDTO.date(), user))
             throw new BadRequestException("date already update");
-        return presenceDAO.save(new Presence(presenceAbstinenceDTO.date(), presenceAbstinenceDTO.abstinenceStatus(), user));
+        return presenceDAO.save(new Presence(presenceAbstinenceDTO.date(), presenceAbstinenceDTO.getAbstinenceStatus(), user));
     }
 
 
@@ -63,7 +63,7 @@ public class PresenceSRV {
         found.setDate(presenceFullDTO.date());
         found.setStartingHour(presenceFullDTO.startingHour());
         found.setFinishHour(presenceFullDTO.finishHour());
-        found.setAbstinenceStatus(presenceFullDTO.abstinenceStatus());
+        found.setAbstinenceStatus(presenceFullDTO.getAbstinenceStatus());
         return presenceDAO.save(found);
     }
 
