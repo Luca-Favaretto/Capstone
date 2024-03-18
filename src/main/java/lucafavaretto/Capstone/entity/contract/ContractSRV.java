@@ -38,14 +38,14 @@ public class ContractSRV {
     public Contract save(ContractDTO contractDTO, UUID userId) {
         User found = userSRV.findById(userId);
         if (contractDAO.existsByUser(found)) throw new BadRequestException("User can have only one contract");
-        Contract contract = new Contract(contractDTO.contractTypology(), contractDTO.weeklyHours(), contractDTO.retribution(), contractDTO.startingDate(), found);
+        Contract contract = new Contract(contractDTO.getContractTypology(), contractDTO.weeklyHours(), contractDTO.retribution(), contractDTO.startingDate(), found);
         return contractDAO.save(contract);
     }
 
 
     public Contract findByIdAndUpdate(UUID id, ContractDTO contractDTO) {
         Contract found = findById(UUID.fromString(String.valueOf(id)));
-        found.setContractTypology(contractDTO.contractTypology());
+        found.setContractTypology(contractDTO.getContractTypology());
         found.setWeeklyHours(contractDTO.weeklyHours());
         found.setRetribution(contractDTO.retribution());
         found.setStartingDate(contractDTO.startingDate());
