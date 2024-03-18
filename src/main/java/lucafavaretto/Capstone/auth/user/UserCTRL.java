@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -37,16 +38,16 @@ public class UserCTRL {
         return user;
     }
 
-    @PutMapping("/me/{id}")
+    @PutMapping("/me")
     @PreAuthorize("hasAuthority('USER')")
-    public User findByIdAndUpdate(@PathVariable UUID id, @RequestBody UserDTO eventDTO, @AuthenticationPrincipal User user, BindingResult validation) {
+    public User findByIdAndUpdate(@RequestBody UserDTO eventDTO, @AuthenticationPrincipal User user, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
         return userSRV.findByIdAndUpdate(user.getId(), eventDTO);
     }
 
-    @DeleteMapping("/me/{id}")
+    @DeleteMapping("/me")
     @PreAuthorize("hasAuthority('USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAuthorById(@AuthenticationPrincipal User currentAuthenticatedUser) {
@@ -64,7 +65,7 @@ public class UserCTRL {
     }
 
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('MANAGER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAuthorById(@PathVariable UUID id) {
@@ -76,9 +77,12 @@ public class UserCTRL {
         userSRV.newCourse(id, currentAuthenticatedUser);
     }
 
-    @PatchMapping("/modRating/{id}/{value}")
-    public void modRating(@PathVariable UUID id, int value) {
-        userSRV.modRating(id, value);
+    @PatchMapping("/modRating/{id}")
+    public User modRating(@PathVariable UUID id, @RequestBody @Validated ValueDTO valueDTO, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
+        return userSRV.modRating(id, valueDTO);
     }
 
 

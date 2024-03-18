@@ -60,7 +60,10 @@ public class PresenceCTRL {
 
     @PutMapping("me/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public Presence findByIdAndUpdate(@PathVariable UUID id, @RequestBody PresenceFullDTO presenceFullDTO) {
+    public Presence findByIdAndUpdate(@PathVariable UUID id, @RequestBody @Validated PresenceFullDTO presenceFullDTO, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
         return presenceSRV.findByIdAndUpdate(id, presenceFullDTO);
     }
 

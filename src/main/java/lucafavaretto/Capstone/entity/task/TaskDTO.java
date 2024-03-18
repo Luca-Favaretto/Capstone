@@ -1,9 +1,6 @@
 package lucafavaretto.Capstone.entity.task;
 
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -19,7 +16,9 @@ public record TaskDTO(
         String description,
         @FutureOrPresent(message = "Expiration Date hour must be in the future or present!")
         LocalDate expirationDate,
-        @NotBlank(message = "User is required!")
-        UUID userId
+
+        @NotNull(message = "User ID is required!")
+        @Pattern(regexp = "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}", message = "Invalid UUID format")
+        String userId
 ) {
 }

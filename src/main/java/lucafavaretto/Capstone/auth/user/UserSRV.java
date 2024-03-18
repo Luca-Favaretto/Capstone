@@ -88,10 +88,10 @@ public class UserSRV {
         userDAO.delete(found);
     }
 
-    public void modRating(UUID id, int value) {
+    public User modRating(UUID id, ValueDTO valueDTO) {
         User found = findById(id);
-        found.setRating(value);
-        userDAO.delete(found);
+        found.setRating(valueDTO.value());
+        return userDAO.save(found);
     }
 
     public void newCourse(UUID id, User user) {

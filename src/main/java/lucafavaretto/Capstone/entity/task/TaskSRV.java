@@ -35,7 +35,7 @@ public class TaskSRV {
 
     public Task findByIdAndUpdate(UUID id, TaskDTO taskDTO) {
         Task found = findById(id);
-        User userFound = userSRV.findById(taskDTO.userId());
+        User userFound = userSRV.findById(UUID.fromString(taskDTO.userId()));
 
         found.setTitle(taskDTO.title());
         found.setDescription(taskDTO.description());
@@ -46,7 +46,7 @@ public class TaskSRV {
     }
 
     public Task save(TaskDTO taskDTO) {
-        User userFound = userSRV.findById(taskDTO.userId());
+        User userFound = userSRV.findById(UUID.fromString(taskDTO.userId()));
         return taskDAO.save(new Task(taskDTO.title(), taskDTO.description(), taskDTO.expirationDate(), userFound));
     }
 
@@ -58,7 +58,7 @@ public class TaskSRV {
     public Page<Task> findByUser(int pageNumber, int pageSize, String orderBy, User user) {
         if (pageNumber > 20) pageSize = 20;
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(orderBy));
-      
+
         return taskDAO.findByUser(pageable, userSRV.findById(user.getId()));
     }
 
