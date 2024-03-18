@@ -49,7 +49,10 @@ public class InternalCoursesCTRL {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public InternalCourses findByIdAndUpdate(@PathVariable UUID id, @RequestBody InternalCoursesDTO internalCoursesDTO) {
+    public InternalCourses findByIdAndUpdate(@PathVariable UUID id, @RequestBody InternalCoursesDTO internalCoursesDTO, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
         return internalCoursesSRV.findByIdAndUpdate(id, internalCoursesDTO);
     }
 

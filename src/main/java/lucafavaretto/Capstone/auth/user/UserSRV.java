@@ -62,7 +62,8 @@ public class UserSRV {
 
     public User save(UserDTO userDTO) throws IOException {
         if (userDAO.existsByEmail(userDTO.email())) throw new BadRequestException("email already exist");
-        User user = new User(userDTO.name(), userDTO.surname(), userDTO.username(), passwordEncoder.encode(userDTO.password()), userDTO.email(), userDTO.name() + userDTO.surname(), userDTO.rating());
+        User user = new User(userDTO.name(), userDTO.surname(), userDTO.username(), passwordEncoder.encode(userDTO.password()), userDTO.email(),
+                "https://ui-avatars.com/api/?name=" + userDTO.name() + "+" + userDTO.surname() + "&background=a0a0a0&rounded=true", 7);
         user.addRole(roleSRV.findByRole("USER"));
         //    emailSender.sendRegistrationEmail(userDTO);
         return userDAO.save(user);
@@ -79,12 +80,17 @@ public class UserSRV {
         found.setUsername(userDTO.username());
         found.setPassword(userDTO.password());
         found.setEmail(userDTO.email());
-        found.setRating(userDTO.rating());
         return userDAO.save(found);
     }
 
     public void deleteById(UUID id) {
         User found = findById(id);
+        userDAO.delete(found);
+    }
+
+    public void modRating(UUID id, int value) {
+        User found = findById(id);
+        found.setRating(value);
         userDAO.delete(found);
     }
 

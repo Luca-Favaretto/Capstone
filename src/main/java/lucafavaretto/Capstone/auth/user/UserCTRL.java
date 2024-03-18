@@ -1,11 +1,13 @@
 package lucafavaretto.Capstone.auth.user;
 
 import lucafavaretto.Capstone.entity.result.Result;
+import lucafavaretto.Capstone.exceptions.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -31,14 +33,17 @@ public class UserCTRL {
 
     ////////////////////////////////////////////////////////////////me action
     @GetMapping("/me")
-    public User getCurrentUser(@AuthenticationPrincipal User authenticatedCustomer) {
-        return authenticatedCustomer;
+    public User getCurrentUser(@AuthenticationPrincipal User user) {
+        return user;
     }
 
     @PutMapping("/me/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public User findByIdAndUpdate(@PathVariable UUID id, @RequestBody UserDTO eventDTO, @AuthenticationPrincipal User currentAuthenticatedUser) {
-        return userSRV.findByIdAndUpdate(currentAuthenticatedUser.getId(), eventDTO);
+    public User findByIdAndUpdate(@PathVariable UUID id, @RequestBody UserDTO eventDTO, @AuthenticationPrincipal User user, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
+        return userSRV.findByIdAndUpdate(user.getId(), eventDTO);
     }
 
     @DeleteMapping("/me/{id}")
@@ -51,7 +56,10 @@ public class UserCTRL {
     ///////////////////////////////////////////////////////////////////////////////////
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('MANAGER')")
-    public User findByIdAndUpdate(@PathVariable UUID id, @RequestBody UserDTO eventDTO) {
+    public User findByIdAndUpdate(@PathVariable UUID id, @RequestBody UserDTO eventDTO, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
         return userSRV.findByIdAndUpdate(id, eventDTO);
     }
 
@@ -67,6 +75,12 @@ public class UserCTRL {
     public void newCourse(@PathVariable UUID id, @AuthenticationPrincipal User currentAuthenticatedUser) {
         userSRV.newCourse(id, currentAuthenticatedUser);
     }
+
+    @PatchMapping("/modRating/{id}/{value}")
+    public void modRating(@PathVariable UUID id, int value) {
+        userSRV.modRating(id, value);
+    }
+
 
     @PostMapping("/completeCourses/{id}")
     public void completeInternalCourses(@PathVariable UUID id, @AuthenticationPrincipal User user) {

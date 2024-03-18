@@ -47,7 +47,10 @@ public class TaskCTRL {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public Task findByIdAndUpdate(@PathVariable UUID id, @RequestBody TaskDTO taskDTO) {
+    public Task findByIdAndUpdate(@PathVariable UUID id, @RequestBody TaskDTO taskDTO, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
         return taskSRV.findByIdAndUpdate(id, taskDTO);
     }
 

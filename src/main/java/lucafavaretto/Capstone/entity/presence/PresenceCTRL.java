@@ -36,7 +36,10 @@ public class PresenceCTRL {
 
     @PostMapping("/finish/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Presence saveFinishHour(@AuthenticationPrincipal User user, @PathVariable UUID id) {
+    public Presence saveFinishHour(@AuthenticationPrincipal User user, @PathVariable UUID id, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
         return this.presenceSRV.saveFinishHour(user, id);
     }
 

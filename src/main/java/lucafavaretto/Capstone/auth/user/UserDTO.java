@@ -19,7 +19,6 @@ public record UserDTO(
         String password,
 
 //        @Email(message = "Email address you provided is not valid.")
-        String email,
-        int rating
+        String email
 ) {
 }
