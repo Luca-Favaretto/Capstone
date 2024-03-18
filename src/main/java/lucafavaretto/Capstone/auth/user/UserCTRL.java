@@ -29,23 +29,38 @@ public class UserCTRL {
         return userSRV.findById(id);
     }
 
+    ////////////////////////////////////////////////////////////////me action
     @GetMapping("/me")
     public User getCurrentUser(@AuthenticationPrincipal User authenticatedCustomer) {
         return authenticatedCustomer;
     }
 
-
     @PutMapping("/me/{id}")
     @PreAuthorize("hasAuthority('USER')")
     public User findByIdAndUpdate(@PathVariable UUID id, @RequestBody UserDTO eventDTO, @AuthenticationPrincipal User currentAuthenticatedUser) {
-        return userSRV.findByIdAndUpdate(id, eventDTO, currentAuthenticatedUser);
+        return userSRV.findByIdAndUpdate(currentAuthenticatedUser.getId(), eventDTO);
     }
 
     @DeleteMapping("/me/{id}")
     @PreAuthorize("hasAuthority('USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAuthorById(@PathVariable UUID id, @AuthenticationPrincipal User currentAuthenticatedUser) {
-        userSRV.deleteById(id, currentAuthenticatedUser);
+    public void deleteAuthorById(@AuthenticationPrincipal User currentAuthenticatedUser) {
+        userSRV.deleteById(currentAuthenticatedUser.getId());
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('MANAGER')")
+    public User findByIdAndUpdate(@PathVariable UUID id, @RequestBody UserDTO eventDTO) {
+        return userSRV.findByIdAndUpdate(id, eventDTO);
+    }
+
+
+    @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('MANAGER')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAuthorById(@PathVariable UUID id) {
+        userSRV.deleteById(id);
     }
 
     @PatchMapping("/addMeCourse/{id}")

@@ -72,9 +72,8 @@ public class UserSRV {
         return userDAO.findByEmail(email).orElseThrow(() -> new NotFoundException(email));
     }
 
-    public User findByIdAndUpdate(UUID id, UserDTO userDTO, User user) {
+    public User findByIdAndUpdate(UUID id, UserDTO userDTO) {
         User found = findById(UUID.fromString(String.valueOf(id)));
-        if (!user.getId().equals(found.getId())) throw new UnauthorizedException("User with wrong id");
         found.setName(userDTO.name());
         found.setSurname(userDTO.surname());
         found.setUsername(userDTO.username());
@@ -84,10 +83,8 @@ public class UserSRV {
         return userDAO.save(found);
     }
 
-    public void deleteById(UUID id, User user) {
+    public void deleteById(UUID id) {
         User found = findById(id);
-        if (!user.getId().equals(UUID.fromString(String.valueOf(id))))
-            throw new UnauthorizedException("User with wrong id");
         userDAO.delete(found);
     }
 
