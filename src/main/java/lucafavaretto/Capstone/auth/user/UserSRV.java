@@ -112,7 +112,7 @@ public class UserSRV {
 
     public void completeTask(UUID id, User user) {
         Task found = taskDAO.findById(id).orElseThrow(() -> new NotFoundException("task don't found"));
-        ResultDTO resultDTO = new ResultDTO(found.getTitle() + LocalDate.now(), "Task description : " + found.getDescription());
+        ResultDTO resultDTO = new ResultDTO(found.getTitle() + " / " + LocalDate.now(), "Task description : " + found.getDescription());
         taskDAO.delete(found);
         resultSRV.save(resultDTO, user);
     }
