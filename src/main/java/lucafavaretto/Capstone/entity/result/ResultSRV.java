@@ -64,7 +64,9 @@ public class ResultSRV {
 
     public Page<Result> findByUser(int pageNumber, int pageSize, String orderBy, User user) {
         if (pageNumber > 20) pageSize = 20;
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(orderBy));
+        Sort sort = "date".equals(orderBy) ? Sort.by(orderBy).descending() : Sort.by(orderBy);
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         User found = userDAO.findById(user.getId()).orElseThrow(() -> new NotFoundException(user.getId()));
         return resultDAO.findByUser(pageable, found);
     }
