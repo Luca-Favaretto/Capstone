@@ -44,7 +44,7 @@ public class ResultSRV {
     public Result save(ResultDTO resultDTO, User user) {
         if (resultDAO.existsByUserAndTitle(user, resultDTO.title()))
             throw new BadRequestException("Result already exist");
-        Result result = new Result(resultDTO.title(), resultDTO.description(), user);
+        Result result = new Result(resultDTO.title(), resultDTO.description(), resultDTO.date(), user);
         result.setDate(LocalDate.now());
         return resultDAO.save(result);
     }

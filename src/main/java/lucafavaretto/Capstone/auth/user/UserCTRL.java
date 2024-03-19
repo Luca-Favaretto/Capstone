@@ -40,11 +40,11 @@ public class UserCTRL {
 
     @PutMapping("/me")
     @PreAuthorize("hasAuthority('USER')")
-    public User findByIdAndUpdate(@RequestBody UserDTO eventDTO, @AuthenticationPrincipal User user, BindingResult validation) {
+    public User findMeAndUpdate(@RequestBody UserNoPassDTO userNoPassDTO, @AuthenticationPrincipal User user, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
-        return userSRV.findByIdAndUpdate(user.getId(), eventDTO);
+        return userSRV.findMeAndUpdate(user.getId(), userNoPassDTO);
     }
 
     @DeleteMapping("/me")

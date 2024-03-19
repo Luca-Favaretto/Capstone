@@ -73,6 +73,15 @@ public class UserSRV {
         return userDAO.findByEmail(email).orElseThrow(() -> new NotFoundException(email));
     }
 
+    public User findMeAndUpdate(UUID id, UserNoPassDTO userNoPassDTO) {
+        User found = findById(UUID.fromString(String.valueOf(id)));
+        found.setName(userNoPassDTO.name());
+        found.setSurname(userNoPassDTO.surname());
+        found.setUsername(userNoPassDTO.username());
+        found.setEmail(userNoPassDTO.email());
+        return userDAO.save(found);
+    }
+
     public User findByIdAndUpdate(UUID id, UserDTO userDTO) {
         User found = findById(UUID.fromString(String.valueOf(id)));
         found.setName(userDTO.name());
@@ -103,7 +112,7 @@ public class UserSRV {
 
     public void completeInternalCourses(UUID id, User user) {
         InternalCourses found = internalCoursesSRV.findById(id);
-        ResultDTO resultDTO = new ResultDTO(found.getTitle(), "Internal course during " + found.getHours() + " hours");
+        ResultDTO resultDTO = new ResultDTO(found.getTitle(), "Internal course during " + found.getHours() + " hours", LocalDate.now());
         User foundUser = findById(user.getId());
         foundUser.removeCourses(found);
         userDAO.save(foundUser);
@@ -112,7 +121,7 @@ public class UserSRV {
 
     public void completeTask(UUID id, User user) {
         Task found = taskDAO.findById(id).orElseThrow(() -> new NotFoundException("task don't found"));
-        ResultDTO resultDTO = new ResultDTO(found.getTitle() + " / " + LocalDate.now(), "Task description : " + found.getDescription());
+        ResultDTO resultDTO = new ResultDTO(found.getTitle(), "Task description : " + found.getDescription(), LocalDate.now());
         taskDAO.delete(found);
         resultSRV.save(resultDTO, user);
     }

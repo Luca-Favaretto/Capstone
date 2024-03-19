@@ -23,7 +23,7 @@ public class ResultCTRL {
     @GetMapping
     public Page<Result> getAll(@RequestParam(defaultValue = "0") int pageNumber,
                                @RequestParam(defaultValue = "10") int pageSize,
-                               @RequestParam(defaultValue = "title") String orderBy) {
+                               @RequestParam(defaultValue = "date") String orderBy) {
         return resultSRV.getAll(pageNumber, pageSize, orderBy);
     }
 

@@ -23,13 +23,16 @@ public class Result {
     private String title;
     private String description;
 
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Result(String title, String description, User user) {
+    public Result(String title, String description, LocalDate date, User user) {
         this.title = title;
         this.description = description;
+        this.date = date;
         this.user = user;
+
     }
 }
