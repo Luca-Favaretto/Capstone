@@ -10,11 +10,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public record PresenceFullDTO(
-        @NotBlank(message = "Date  is required!")
+
         LocalDate date,
-        @PastOrPresent(message = "Starting hour must be in the past or present")
+
         LocalTime startingHour,
-        @PastOrPresent(message = "Finish hour must be in the past or present")
+       
         LocalTime finishHour,
         @NotEmpty(message = "Abstinence status  is required!")
         @Size(min = 6, max = 7, message = "Abstinence status typology must be  6 to 7 characters long ")

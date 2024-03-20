@@ -2,6 +2,8 @@ package lucafavaretto.Capstone.entity.presence;
 
 import lucafavaretto.Capstone.auth.user.User;
 import lucafavaretto.Capstone.auth.user.UserSRV;
+import lucafavaretto.Capstone.entity.contract.Contract;
+import lucafavaretto.Capstone.entity.contract.ContractSRV;
 import lucafavaretto.Capstone.entity.internalCourses.InternalCourses;
 import lucafavaretto.Capstone.entity.internalCourses.InternalCoursesDTO;
 import lucafavaretto.Capstone.entity.result.Result;
@@ -25,6 +27,8 @@ public class PresenceSRV {
     private PresenceDAO presenceDAO;
     @Autowired
     private UserSRV userSRV;
+    @Autowired
+    private ContractSRV contractSRV;
 
     public Page<Presence> getAll(int pageNumber, int pageSize, String orderBy) {
         if (pageNumber > 20) pageSize = 20;
@@ -32,9 +36,15 @@ public class PresenceSRV {
         return presenceDAO.findAll(pageable);
     }
 
+
     public Presence findById(UUID id) {
         return presenceDAO.findById(UUID.fromString(String.valueOf(id)))
                 .orElseThrow(() -> new NotFoundException(String.valueOf(id)));
+    }
+
+    public Presence save(UUID id, PresenceFullDTO presenceFullDTO) {
+        User found = userSRV.findById(id);
+        return presenceDAO.save(new Presence(presenceFullDTO.date(), presenceFullDTO.startingHour(), presenceFullDTO.finishHour(), presenceFullDTO.getAbstinenceStatus(), found));
     }
 
     public Presence saveStartingHour(User user) {
@@ -78,5 +88,12 @@ public class PresenceSRV {
         return presenceDAO.findByUser(pageable, userSRV.findById(user.getId()));
     }
 
-
+    public int getPresencePerCent(User user) {
+        Contract contract = contractSRV.findByUser(user);
+        int daysFromHiring = contract.getStartingDate().until(LocalDate.now()).getDays();
+        System.out.println(daysFromHiring + "hiring");
+        int daysWorked = presenceDAO.countPresence(AbstinenceStatus.PRESENT);
+        System.out.println(daysWorked + "worked");
+        return (int) (100 * daysWorked / daysFromHiring) * 100 / 70;
+    }
 }

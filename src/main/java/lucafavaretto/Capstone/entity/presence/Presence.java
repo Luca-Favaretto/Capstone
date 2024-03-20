@@ -32,6 +32,14 @@ public class Presence {
     private User user;
 
 
+    public Presence(LocalDate date, LocalTime startingHour, LocalTime finishHour, AbstinenceStatus abstinenceStatus, User user) {
+        this.date = date;
+        this.startingHour = startingHour;
+        this.finishHour = finishHour;
+        this.abstinenceStatus = abstinenceStatus;
+        this.user = user;
+    }
+
     public Presence(LocalDate date, LocalTime startingHour, AbstinenceStatus abstinenceStatus, User user) {
         this.date = date;
         this.startingHour = startingHour;

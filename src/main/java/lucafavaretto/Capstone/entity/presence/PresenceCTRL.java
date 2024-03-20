@@ -28,6 +28,16 @@ public class PresenceCTRL {
         return presenceSRV.getAll(pageNumber, pageSize, orderBy);
     }
 
+    @PostMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Presence save(@PathVariable UUID id, @RequestBody @Validated PresenceFullDTO presenceFullDTO, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
+        return this.presenceSRV.save(id, presenceFullDTO);
+    }
+
+    ////////////////////////////////////////////////////////////////////////me
     @PostMapping("/start")
     @ResponseStatus(HttpStatus.CREATED)
     public Presence saveStartingHour(@AuthenticationPrincipal User user) {
@@ -51,6 +61,7 @@ public class PresenceCTRL {
         }
         return this.presenceSRV.saveAbstinence(presenceAbstinenceDTO, user);
     }
+    ////////////////////////////////////////////////////////////////////////
 
     @GetMapping("/{id}")
     public Presence findById(@PathVariable UUID id) {
@@ -82,4 +93,8 @@ public class PresenceCTRL {
         return presenceSRV.findByUser(pageNumber, pageSize, orderBy, user);
     }
 
+    @GetMapping("/presentPerCent")
+    public int getPresencePerCent(@AuthenticationPrincipal User user) {
+        return presenceSRV.getPresencePerCent(user);
+    }
 }

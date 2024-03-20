@@ -11,11 +11,11 @@ public record ContractDTO(
         @NotEmpty(message = "Contract typology is required!")
         @Size(min = 9, max = 9, message = "Contract typology must be 9 characters long ")
         String contractTypology,
-        @NotEmpty(message = "Weekly hours is required!")
+        @NotNull(message = "Weekly hours is required!")
         @Min(value = 10, message = "Weekly hours must be at least 10")
         @Max(value = 40, message = "Weekly hours cannot exceed 40")
         int weeklyHours,
-        @NotEmpty(message = "Retribution is required!")
+        @NotNull(message = "Retribution is required!")
         double retribution,
         @PastOrPresent(message = "Starting date must be in the past or present")
         LocalDate startingDate
