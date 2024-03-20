@@ -47,13 +47,25 @@ public class PresenceSRV {
         return presenceDAO.save(new Presence(presenceFullDTO.date(), presenceFullDTO.startingHour(), presenceFullDTO.finishHour(), presenceFullDTO.getAbstinenceStatus(), found));
     }
 
+    public boolean dateExists(User user) {
+        return presenceDAO.existsByDateAndUser(LocalDate.now(), user);
+    }
+
     public Presence saveStartingHour(User user) {
-        if (presenceDAO.existsByDateAndUser(LocalDate.now(), user))
-            throw new BadRequestException("date already update");
+        if (dateExists(user)) {
+            throw new BadRequestException("Date already update");
+        }
         return presenceDAO.save(new Presence(LocalDate.now(), LocalTime.now(), AbstinenceStatus.PRESENT, user));
     }
 
+    public boolean dateExistsFinish(User user) {
+        return presenceDAO.existsByDateAndUserAndFinishHour(LocalDate.now(), user);
+    }
+
     public Presence saveFinishHour(User user, UUID id) {
+        if (dateExistsFinish(user)) {
+            throw new BadRequestException("Date already finish");
+        }
         Presence presence = findById(id);
         if (presence.getUser().getId().equals(user.getId())) {
             presence.setFinishHour(LocalTime.now());
@@ -95,5 +107,9 @@ public class PresenceSRV {
         int daysWorked = presenceDAO.countPresence(AbstinenceStatus.PRESENT);
         System.out.println(daysWorked + "worked");
         return (int) (100 * daysWorked / daysFromHiring) * 100 / 70;
+    }
+
+    public Presence findByNowAndUser(User user) {
+        return presenceDAO.findByNowAndUser(LocalDate.now(), user).orElseThrow(() -> new BadRequestException("No Presence today"));
     }
 }

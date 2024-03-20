@@ -38,24 +38,31 @@ public class PresenceCTRL {
     }
 
     ////////////////////////////////////////////////////////////////////////me
+    @GetMapping("/exist")
+    public boolean existsDate(@AuthenticationPrincipal User user) {
+        return this.presenceSRV.dateExists(user);
+    }
+
     @PostMapping("/start")
     @ResponseStatus(HttpStatus.CREATED)
     public Presence saveStartingHour(@AuthenticationPrincipal User user) {
         return this.presenceSRV.saveStartingHour(user);
     }
 
+    @GetMapping("/existFinish")
+    public boolean existsDateAndFinish(@AuthenticationPrincipal User user) {
+        return this.presenceSRV.dateExistsFinish(user);
+    }
+
     @PostMapping("/finish/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Presence saveFinishHour(@AuthenticationPrincipal User user, @PathVariable UUID id, BindingResult validation) {
-        if (validation.hasErrors()) {
-            throw new BadRequestException(validation.getAllErrors());
-        }
+    public Presence saveFinishHour(@AuthenticationPrincipal User user, @PathVariable UUID id) {
         return this.presenceSRV.saveFinishHour(user, id);
     }
 
     @PostMapping("/abstinence")
     @ResponseStatus(HttpStatus.CREATED)
-    public Presence saveFinishHour(@AuthenticationPrincipal User user, @RequestBody @Validated PresenceAbstinenceDTO presenceAbstinenceDTO, BindingResult validation) {
+    public Presence saveAbstinence(@AuthenticationPrincipal User user, @RequestBody @Validated PresenceAbstinenceDTO presenceAbstinenceDTO, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
@@ -93,8 +100,15 @@ public class PresenceCTRL {
         return presenceSRV.findByUser(pageNumber, pageSize, orderBy, user);
     }
 
-    @GetMapping("/presentPerCent")
+    @GetMapping("/perCent")
     public int getPresencePerCent(@AuthenticationPrincipal User user) {
         return presenceSRV.getPresencePerCent(user);
     }
+
+    @GetMapping("/now")
+    public Presence findByNowAndUser(@AuthenticationPrincipal User user) {
+        return presenceSRV.findByNowAndUser(user);
+    }
+
 }
+
