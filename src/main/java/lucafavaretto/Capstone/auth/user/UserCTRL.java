@@ -86,7 +86,7 @@ public class UserCTRL {
     }
 
 
-    @PostMapping("/completeCourses/{id}")
+    @PostMapping("/completeCourse/{id}")
     public void completeInternalCourses(@PathVariable UUID id, @AuthenticationPrincipal User user) {
         userSRV.completeInternalCourses(id, user);
     }

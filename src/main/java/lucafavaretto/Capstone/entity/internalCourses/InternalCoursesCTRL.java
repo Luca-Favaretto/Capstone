@@ -71,5 +71,13 @@ public class InternalCoursesCTRL {
         return internalCoursesSRV.findNotCompletedInternalCourses(pageNumber, pageSize, orderBy, user);
     }
 
+    @GetMapping("/me")
+    public Page<InternalCourses> findCoursesByUser(@RequestParam(defaultValue = "0") int pageNumber,
+                                                   @RequestParam(defaultValue = "10") int pageSize,
+                                                   @RequestParam(defaultValue = "title") String orderBy,
+                                                   @AuthenticationPrincipal User user) {
+        return internalCoursesSRV.findCoursesByUser(pageNumber, pageSize, orderBy, user);
+    }
+
 
 }

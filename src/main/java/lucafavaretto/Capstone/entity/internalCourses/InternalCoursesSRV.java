@@ -65,4 +65,11 @@ public class InternalCoursesSRV {
 
         return internalCoursesDAO.findNotCompletedInternalCourses(pageable, found);
     }
+
+    public Page<InternalCourses> findCoursesByUser(int pageNumber, int pageSize, String orderBy, User user) {
+        if (pageNumber > 20) pageSize = 20;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(orderBy));
+        User found = userDAO.findById(user.getId()).orElseThrow(() -> new NotFoundException(user.getId()));
+        return internalCoursesDAO.findCoursesByUser(pageable, found);
+    }
 }

@@ -18,4 +18,6 @@ public interface InternalCoursesDAO extends JpaRepository<InternalCourses, UUID>
     Page<InternalCourses> findNotCompletedInternalCourses(Pageable pageable, User user);
 
 
+    @Query("SELECT i FROM InternalCourses i JOIN i.users u ON u = :user")
+    Page<InternalCourses> findCoursesByUser(Pageable pageable, User user);
 }
