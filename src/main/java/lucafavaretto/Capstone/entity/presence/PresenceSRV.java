@@ -104,7 +104,7 @@ public class PresenceSRV {
         Contract contract = contractSRV.findByUser(user);
         int daysFromHiring = contract.getStartingDate().until(LocalDate.now()).getDays();
         System.out.println(daysFromHiring + "hiring");
-        int daysWorked = presenceDAO.countPresence(AbstinenceStatus.PRESENT);
+        int daysWorked = presenceDAO.countPresence(AbstinenceStatus.PRESENT, user);
         System.out.println(daysWorked + "worked");
         return (int) (100 * daysWorked / daysFromHiring) * 100 / 70;
     }

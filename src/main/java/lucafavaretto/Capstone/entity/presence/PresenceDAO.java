@@ -25,8 +25,8 @@ public interface PresenceDAO extends JpaRepository<Presence, UUID> {
     @Query("SELECT p FROM Presence p WHERE p.user=:user")
     Page<Presence> findByUser(Pageable pageable, User user);
 
-    @Query("SELECT COUNT(p) FROM Presence p WHERE p.abstinenceStatus = :status")
-    int countPresence(AbstinenceStatus status);
+    @Query("SELECT COUNT(p) FROM Presence p WHERE p.abstinenceStatus = :status AND p.user= :user")
+    int countPresence(AbstinenceStatus status, User user);
 
     @Query("SELECT p FROM Presence p WHERE p.date=:date AND p.user=:user")
     Optional<Presence> findByNowAndUser(LocalDate date, User user);
