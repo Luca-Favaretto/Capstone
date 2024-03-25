@@ -66,7 +66,15 @@ public class TaskCTRL {
                                  @RequestParam(defaultValue = "10") int pageSize,
                                  @RequestParam(defaultValue = "expirationDate") String orderBy,
                                  @AuthenticationPrincipal User user) {
-        return taskSRV.findByUser(pageNumber, pageSize, orderBy, user);
+        return taskSRV.findByUser(pageNumber, pageSize, orderBy, user.getId());
+    }
+
+    @GetMapping("/user/{id}")
+    public Page<Task> findByUser(@RequestParam(defaultValue = "0") int pageNumber,
+                                 @RequestParam(defaultValue = "10") int pageSize,
+                                 @RequestParam(defaultValue = "expirationDate") String orderBy,
+                                 @PathVariable UUID id) {
+        return taskSRV.findByUser(pageNumber, pageSize, orderBy, id);
     }
 
 }

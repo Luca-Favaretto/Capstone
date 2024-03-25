@@ -55,11 +55,11 @@ public class TaskSRV {
         taskDAO.delete(found);
     }
 
-    public Page<Task> findByUser(int pageNumber, int pageSize, String orderBy, User user) {
+    public Page<Task> findByUser(int pageNumber, int pageSize, String orderBy, UUID id) {
         if (pageNumber > 20) pageSize = 20;
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(orderBy));
 
-        return taskDAO.findByUser(pageable, userSRV.findById(user.getId()));
+        return taskDAO.findByUser(pageable, userSRV.findById(id));
     }
 
 }
