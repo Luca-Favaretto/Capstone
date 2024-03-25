@@ -44,7 +44,7 @@ public class ContractCTRL {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public Contract findByIdAndUpdate(@PathVariable UUID id, @RequestBody @Validated ContractDTO contractDTO, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());

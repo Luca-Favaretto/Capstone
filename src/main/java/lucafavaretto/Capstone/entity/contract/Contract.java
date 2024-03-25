@@ -22,6 +22,7 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
+    @Enumerated(EnumType.STRING)
     private ContractTypology contractTypology;
     private int weeklyHours;
     private double retribution;
