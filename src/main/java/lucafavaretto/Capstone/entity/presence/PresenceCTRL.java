@@ -94,7 +94,7 @@ public class PresenceCTRL {
 
     @GetMapping("/me")
     public Page<Presence> findByUser(@RequestParam(defaultValue = "0") int pageNumber,
-                                     @RequestParam(defaultValue = "10") int pageSize,
+                                     @RequestParam(defaultValue = "1000") int pageSize,
                                      @RequestParam(defaultValue = "date") String orderBy,
                                      @AuthenticationPrincipal User user) {
         return presenceSRV.findByUser(pageNumber, pageSize, orderBy, user);

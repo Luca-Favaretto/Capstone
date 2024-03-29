@@ -95,8 +95,8 @@ public class PresenceSRV {
     }
 
     public Page<Presence> findByUser(int pageNumber, int pageSize, String orderBy, User user) {
-        if (pageNumber > 20) pageSize = 20;
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(orderBy));
+        Sort sort = Sort.by(orderBy).descending();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         return presenceDAO.findByUser(pageable, userSRV.findById(user.getId()));
     }
 

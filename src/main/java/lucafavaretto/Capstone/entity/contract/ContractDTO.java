@@ -17,7 +17,7 @@ public record ContractDTO(
         int weeklyHours,
         @NotNull(message = "Retribution is required!")
         double retribution,
-        @PastOrPresent(message = "Starting date must be in the past or present")
+        @Past(message = "Starting date must be in the past")
         LocalDate startingDate
 ) {
     public ContractTypology getContractTypology() {

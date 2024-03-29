@@ -63,9 +63,9 @@ public class UserSRV {
     public User save(UserDTO userDTO) throws IOException {
         if (userDAO.existsByEmail(userDTO.email())) throw new BadRequestException("email already exist");
         User user = new User(userDTO.name(), userDTO.surname(), userDTO.username(), passwordEncoder.encode(userDTO.password()), userDTO.email(),
-                "https://ui-avatars.com/api/?name=" + userDTO.name() + "+" + userDTO.surname() + "&background=427aa1&rounded=true", 70);
+                "https://ui-avatars.com/api/?name=" + userDTO.name() + "+" + userDTO.surname() + "&background=random&rounded=true", 70);
         user.addRole(roleSRV.findByRole("USER"));
-        //    emailSender.sendRegistrationEmail(userDTO);
+        emailSender.sendRegistrationEmail(userDTO);
         return userDAO.save(user);
     }
 

@@ -10,7 +10,7 @@ import lucafavaretto.Capstone.enums.ContractTypology;
 import java.time.LocalDate;
 
 public record PresenceAbstinenceDTO(
-        @NotBlank(message = "Date  is required!")
+        
         LocalDate date,
         @NotEmpty(message = "Abstinence status  is required!")
         @Size(min = 6, max = 7, message = "Abstinence status typology must be  6 to 7 characters long ")

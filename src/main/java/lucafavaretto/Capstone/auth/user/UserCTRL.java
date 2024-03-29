@@ -21,8 +21,9 @@ public class UserCTRL {
 
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Page<User> getAll(@RequestParam(defaultValue = "0") int pageNumber,
-                             @RequestParam(defaultValue = "10") int pageSize,
+                             @RequestParam(defaultValue = "20") int pageSize,
                              @RequestParam(defaultValue = "name") String orderBy) {
         return userSRV.getAll(pageNumber, pageSize, orderBy);
     }

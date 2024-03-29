@@ -28,8 +28,9 @@ public class EmailSender {
     public void sendRegistrationEmail(UserDTO newUser) throws IOException {
         Email from = new Email("favabest@gmail.com");
         String subject = "Sending with SendGrid is Fun";
+        System.out.println(newUser.email());
         Email to = new Email(newUser.email());
-        Content content = new Content("text/plain", "Congratulation "+newUser.name()+" you have new account!!");
+        Content content = new Content("text/plain", "Congratulation " + newUser.name() + " you have new account!!");
         Mail mail = new Mail(from, subject, to, content);
 
         SendGrid sg = new SendGrid(apiKey);
