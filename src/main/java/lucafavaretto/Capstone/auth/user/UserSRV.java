@@ -110,20 +110,20 @@ public class UserSRV {
     }
 
 
-    public void completeInternalCourses(UUID id, User user) {
+    public Result completeInternalCourses(UUID id, User user) {
         InternalCourses found = internalCoursesSRV.findById(id);
         ResultDTO resultDTO = new ResultDTO(found.getTitle(), "Internal course during " + found.getHours() + " hours", LocalDate.now());
         User foundUser = findById(user.getId());
         foundUser.removeCourses(found);
         userDAO.save(foundUser);
-        resultSRV.save(resultDTO, foundUser);
+        return resultSRV.save(resultDTO, foundUser);
     }
 
-    public void completeTask(UUID id, User user) {
+    public Result completeTask(UUID id, User user) {
         Task found = taskDAO.findById(id).orElseThrow(() -> new NotFoundException("task don't found"));
         ResultDTO resultDTO = new ResultDTO(found.getTitle(), "Task description : " + found.getDescription(), LocalDate.now());
         taskDAO.delete(found);
-        resultSRV.save(resultDTO, user);
+        return resultSRV.save(resultDTO, user);
     }
 
     public void addRole(UUID id, String name) {

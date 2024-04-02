@@ -88,13 +88,13 @@ public class UserCTRL {
 
 
     @PostMapping("/completeCourse/{id}")
-    public void completeInternalCourses(@PathVariable UUID id, @AuthenticationPrincipal User user) {
-        userSRV.completeInternalCourses(id, user);
+    public Result completeInternalCourses(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+        return userSRV.completeInternalCourses(id, user);
     }
 
     @PostMapping("/completeTask/{id}")
-    public void completeTask(@PathVariable UUID id, @AuthenticationPrincipal User user) {
-        userSRV.completeTask(id, user);
+    public Result completeTask(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+        return userSRV.completeTask(id, user);
     }
 
     @PatchMapping("/addRole/{id}")

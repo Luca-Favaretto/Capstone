@@ -27,7 +27,7 @@ public class InternalCoursesCTRL {
 
     @GetMapping
     public Page<InternalCourses> getAll(@RequestParam(defaultValue = "0") int pageNumber,
-                                        @RequestParam(defaultValue = "10") int pageSize,
+                                        @RequestParam(defaultValue = "20") int pageSize,
                                         @RequestParam(defaultValue = "title") String orderBy) {
         return internalCoursesSRV.getAll(pageNumber, pageSize, orderBy);
     }

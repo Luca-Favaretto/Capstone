@@ -62,7 +62,7 @@ public class ResultCTRL {
 
     @GetMapping("/me")
     public Page<Result> findByUser(@RequestParam(defaultValue = "0") int pageNumber,
-                                   @RequestParam(defaultValue = "10") int pageSize,
+                                   @RequestParam(defaultValue = "20") int pageSize,
                                    @RequestParam(defaultValue = "date") String orderBy,
                                    @AuthenticationPrincipal User user) {
         return resultSRV.findByUser(pageNumber, pageSize, orderBy, user);
